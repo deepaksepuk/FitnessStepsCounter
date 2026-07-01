@@ -1,4 +1,4 @@
-package com.project.fitnessstepscounter
+package madproject.deepaks3533898.fitnessstepscounter
 
 import org.junit.Test
 
