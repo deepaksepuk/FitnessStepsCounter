@@ -18,6 +18,9 @@ interface StepDao {
     @Query("SELECT * FROM step_sessions ORDER BY id DESC")
     fun getAllSessions(): Flow<List<StepSessionEntity>>
 
+    @Query("SELECT * FROM step_sessions ORDER BY id DESC LIMIT 1")
+    fun getLatestSession(): Flow<StepSessionEntity?>
+
     @Query("DELETE FROM step_sessions")
     suspend fun deleteAll()
 

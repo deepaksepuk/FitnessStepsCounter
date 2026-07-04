@@ -11,8 +11,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
@@ -26,6 +28,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,15 +38,25 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.util.TimeUtils.formatDuration
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import madproject.deepaks3533898.fitnessstepscounter.viewmodel.DashboardViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DashboardScreen() {
+fun DashboardScreen(
+    navController: NavHostController,
+    viewModel: DashboardViewModel = viewModel()
+) {
 
-    val steps = 4865
+    val latestSession by viewModel.latestSession.collectAsState()
+
+    val steps = latestSession?.steps ?: 0
     val goal = 10000
 
-    val progress = steps.toFloat() / goal
+    val progress =
+        steps.toFloat() / goal
 
     Scaffold(
 
@@ -69,6 +83,7 @@ fun DashboardScreen() {
 
             modifier = Modifier
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
                 .padding(paddingValues)
                 .padding(16.dp)
 
@@ -173,7 +188,10 @@ fun DashboardScreen() {
 
                     title = "Distance",
 
-                    value = "3.7 km",
+                    value = String.format(
+                        "%.2f km",
+                        latestSession?.distance ?: 0f
+                    ),
 
                     icon = Icons.Default.Person
 
@@ -185,7 +203,10 @@ fun DashboardScreen() {
 
                     title = "Calories",
 
-                    value = "214 kcal",
+                    value = String.format(
+                        "%.0f kcal",
+                        latestSession?.calories ?: 0f
+                    ),
 
                     icon = Icons.Default.Person
 
@@ -201,7 +222,9 @@ fun DashboardScreen() {
 
                 title = "Activity Time",
 
-                value = "42 min",
+                value = formatDuration(
+                    latestSession?.duration ?: 0L
+                ),
 
                 icon = Icons.Default.Person
 
@@ -211,7 +234,9 @@ fun DashboardScreen() {
 
             Button(
 
-                onClick = { },
+                onClick = {
+                    navController.navigate(Screen.StartWalking.route)
+                },
 
                 modifier = Modifier
                     .fillMaxWidth()
@@ -257,13 +282,45 @@ fun DashboardScreen() {
 
                     Spacer(modifier = Modifier.height(6.dp))
 
-                    Text("Remaining : ${goal - steps} Steps")
-
+                    Text(
+                        "Remaining : ${(goal - steps).coerceAtLeast(0)} Steps"
+                    )
                 }
 
             }
 
         }
+
+    }
+
+}
+
+fun formatDuration(
+    seconds: Long
+): String {
+
+    val hours = seconds / 3600
+
+    val minutes = (seconds % 3600) / 60
+
+    val secs = seconds % 60
+
+    return if (hours > 0) {
+
+        String.format(
+            "%02d:%02d:%02d",
+            hours,
+            minutes,
+            secs
+        )
+
+    } else {
+
+        String.format(
+            "%02d:%02d",
+            minutes,
+            secs
+        )
 
     }
 
@@ -356,7 +413,7 @@ fun DashboardPreview() {
 
     MaterialTheme {
 
-        DashboardScreen()
+//        DashboardScreen()
 
     }
 

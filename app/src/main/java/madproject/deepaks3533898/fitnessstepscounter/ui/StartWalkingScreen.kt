@@ -4,6 +4,7 @@ package madproject.deepaks3533898.fitnessstepscounter.ui
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -17,9 +18,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Refresh
@@ -28,6 +32,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -48,14 +53,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import madproject.deepaks3533898.fitnessstepscounter.viewmodel.StepTrackerViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StartWalkingScreen(
-
+    navController: NavHostController,
     viewModel: StepTrackerViewModel = viewModel()
-
 ) {
 
     val state by viewModel.uiState.collectAsState()
@@ -104,8 +110,23 @@ fun StartWalkingScreen(
             TopAppBar(
 
                 title = {
-
                     Text("Start Walking")
+                },
+
+                navigationIcon = {
+
+                    IconButton(
+                        onClick = {
+                            navController.popBackStack()
+                        }
+                    ) {
+
+                        Icon(
+                            Icons.Default.ArrowBack,
+                            contentDescription = "Back"
+                        )
+
+                    }
 
                 }
 
@@ -119,6 +140,7 @@ fun StartWalkingScreen(
 
             modifier = Modifier
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
                 .padding(padding)
                 .padding(16.dp),
 
@@ -244,6 +266,17 @@ fun StartWalkingScreen(
                     modifier = Modifier.fillMaxWidth(),
 
                     onClick = {
+
+                        if (!viewModel.isSensorAvailable()) {
+
+                            Toast.makeText(
+                                context,
+                                "Step Counter Sensor Not Available",
+                                Toast.LENGTH_LONG
+                            ).show()
+
+                            return@Button
+                        }
 
                         if (permissionGranted) {
 

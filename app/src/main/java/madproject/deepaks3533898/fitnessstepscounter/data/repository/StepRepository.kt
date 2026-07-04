@@ -20,6 +20,10 @@ class StepRepository(
 
     }
 
+    fun getLatestSession(): Flow<StepSessionEntity?> {
+        return dao.getLatestSession()
+    }
+
     fun getAllSessions():
 
             Flow<List<StepSessionEntity>> {

@@ -88,6 +88,8 @@ class StepTrackerViewModel(
             isTracking = true
         )
 
+
+
         sensorManager.startTracking { totalSteps ->
 
             if (initialSensorValue == null) {
