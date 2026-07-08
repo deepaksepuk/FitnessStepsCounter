@@ -21,3 +21,14 @@ data class StepSessionEntity(
     val duration: Long
 
 )
+
+@Entity(tableName = "goal_settings")
+data class GoalEntity(
+
+    @PrimaryKey
+    val id: Int = 1,
+
+    val dailyGoal: Int,
+    val dailyCalorieGoal: Int
+
+)

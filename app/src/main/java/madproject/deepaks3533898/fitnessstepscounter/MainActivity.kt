@@ -38,6 +38,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.stressleveltester.AppUserData
 import kotlinx.coroutines.delay
 import madproject.deepaks3533898.fitnessstepscounter.theme.FitnessStepsCounter
+import madproject.deepaks3533898.fitnessstepscounter.ui.GoalSettingScreen
+import madproject.deepaks3533898.fitnessstepscounter.ui.MainScreen
 import madproject.deepaks3533898.fitnessstepscounter.ui.StartWalkingScreen
 
 class MainActivity : ComponentActivity() {
@@ -111,7 +113,9 @@ fun AppNavigationMain() {
         }
 
         composable(Screen.Home.route) {
-            DashboardScreen(navController)
+//            DashboardScreen(navController)
+
+            MainScreen()
         }
 
 
@@ -120,6 +124,9 @@ fun AppNavigationMain() {
             StartWalkingScreen(navController)
         }
 
+        composable(Screen.GoalSetting.route) {
+            GoalSettingScreen()
+        }
 
     }
 }
@@ -131,6 +138,10 @@ sealed class Screen(val route: String) {
     object Home : Screen("home")
 
     object StartWalking : Screen("start_walking")
+    object GoalSetting : Screen("goal_setting")
+
+
+
 
 }
 

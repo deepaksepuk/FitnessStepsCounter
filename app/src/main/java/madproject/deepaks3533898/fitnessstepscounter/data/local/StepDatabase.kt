@@ -8,14 +8,14 @@ import androidx.room.RoomDatabase
 
     entities = [
 
-        StepSessionEntity::class
+        StepSessionEntity::class,
+                GoalEntity::class
+
 
     ],
 
     version = 1,
-
     exportSchema = false
-
 )
 
 abstract class StepDatabase : RoomDatabase() {

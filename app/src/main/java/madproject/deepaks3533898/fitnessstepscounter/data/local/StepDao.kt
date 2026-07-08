@@ -24,4 +24,11 @@ interface StepDao {
     @Query("DELETE FROM step_sessions")
     suspend fun deleteAll()
 
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun saveGoal(goal: GoalEntity)
+
+    @Query("SELECT * FROM goal_settings WHERE id = 1")
+    fun getGoal(): Flow<GoalEntity?>
+
 }

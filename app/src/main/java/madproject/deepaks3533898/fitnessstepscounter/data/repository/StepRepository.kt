@@ -1,6 +1,7 @@
 package madproject.deepaks3533898.fitnessstepscounter.data.repository
 
 import kotlinx.coroutines.flow.Flow
+import madproject.deepaks3533898.fitnessstepscounter.data.local.GoalEntity
 import madproject.deepaks3533898.fitnessstepscounter.data.local.StepDao
 import madproject.deepaks3533898.fitnessstepscounter.data.local.StepSessionEntity
 
@@ -30,6 +31,14 @@ class StepRepository(
 
         return dao.getAllSessions()
 
+    }
+
+    suspend fun saveGoal(goal: GoalEntity) {
+        dao.saveGoal(goal)
+    }
+
+    fun getGoal(): Flow<GoalEntity?> {
+        return dao.getGoal()
     }
 
 }

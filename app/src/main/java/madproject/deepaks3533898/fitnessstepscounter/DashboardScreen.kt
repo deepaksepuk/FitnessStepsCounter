@@ -24,9 +24,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -38,260 +36,249 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.util.TimeUtils.formatDuration
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import madproject.deepaks3533898.fitnessstepscounter.viewmodel.DashboardViewModel
+import madproject.deepaks3533898.fitnessstepscounter.viewmodel.GoalViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardScreen(
     navController: NavHostController,
-    viewModel: DashboardViewModel = viewModel()
+    viewModel: DashboardViewModel = viewModel(),
+    goalViewModel: GoalViewModel = viewModel()
 ) {
 
     val latestSession by viewModel.latestSession.collectAsState()
 
     val steps = latestSession?.steps ?: 0
-    val goal = 10000
+//    val goal = 10000
+
+//    val goal by goalViewModel.goal.collectAsState()
+
+
+    val goalState by viewModel.goal.collectAsState()
+
+    val goal = goalState.stepGoal
 
     val progress =
         steps.toFloat() / goal
 
-    Scaffold(
 
-        topBar = {
 
-            TopAppBar(
+    Column(
 
-                title = {
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+//                .padding(paddingValues)
+            .padding(16.dp)
 
-                    Text(
-                        text = "Fitness Step Counter",
-                        fontWeight = FontWeight.Bold
-                    )
+    ) {
 
-                }
+        Text(
+
+            text = "Good Morning 👋",
+
+            fontSize = 28.sp,
+
+            fontWeight = FontWeight.Bold
+
+        )
+
+        Spacer(modifier = Modifier.height(4.dp))
+
+        Text(
+
+            text = "Today's Progress",
+
+            color = Color.Gray,
+
+            fontSize = 16.sp
+
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Card(
+
+            modifier = Modifier.fillMaxWidth(),
+
+            colors = CardDefaults.cardColors(
+
+                containerColor = MaterialTheme.colorScheme.primaryContainer
 
             )
-
-        }
-
-    ) { paddingValues ->
-
-        Column(
-
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(paddingValues)
-                .padding(16.dp)
 
         ) {
 
-            Text(
+            Column(
 
-                text = "Good Morning 👋",
+                modifier = Modifier.padding(20.dp),
 
-                fontSize = 28.sp,
-
-                fontWeight = FontWeight.Bold
-
-            )
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            Text(
-
-                text = "Today's Progress",
-
-                color = Color.Gray,
-
-                fontSize = 16.sp
-
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Card(
-
-                modifier = Modifier.fillMaxWidth(),
-
-                colors = CardDefaults.cardColors(
-
-                    containerColor = MaterialTheme.colorScheme.primaryContainer
-
-                )
+                horizontalAlignment = Alignment.CenterHorizontally
 
             ) {
 
-                Column(
+                Text(
 
-                    modifier = Modifier.padding(20.dp),
+                    text = "Today's Steps",
 
-                    horizontalAlignment = Alignment.CenterHorizontally
-
-                ) {
-
-                    Text(
-
-                        text = "Today's Steps",
-
-                        color = Color.Gray
-
-                    )
-
-                    Spacer(modifier = Modifier.height(10.dp))
-
-                    Text(
-
-                        text = "$steps",
-
-                        fontSize = 48.sp,
-
-                        fontWeight = FontWeight.Bold
-
-                    )
-
-                    Spacer(modifier = Modifier.height(10.dp))
-
-                    LinearProgressIndicator(
-
-                        progress = { progress },
-
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(10.dp)
-                            .clip(RoundedCornerShape(50))
-
-                    )
-
-                    Spacer(modifier = Modifier.height(10.dp))
-
-                    Text("$steps / $goal Steps")
-
-                }
-
-            }
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Row(
-
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-
-            ) {
-
-                StatCard(
-
-                    modifier = Modifier.weight(1f),
-
-                    title = "Distance",
-
-                    value = String.format(
-                        "%.2f km",
-                        latestSession?.distance ?: 0f
-                    ),
-
-                    icon = Icons.Default.Person
+                    color = Color.Gray
 
                 )
 
-                StatCard(
+                Spacer(modifier = Modifier.height(10.dp))
 
-                    modifier = Modifier.weight(1f),
+                Text(
 
-                    title = "Calories",
+                    text = "$steps",
 
-                    value = String.format(
-                        "%.0f kcal",
-                        latestSession?.calories ?: 0f
-                    ),
+                    fontSize = 48.sp,
 
-                    icon = Icons.Default.Person
+                    fontWeight = FontWeight.Bold
 
                 )
 
+                Spacer(modifier = Modifier.height(10.dp))
+
+                LinearProgressIndicator(
+
+                    progress = { progress },
+
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(10.dp)
+                        .clip(RoundedCornerShape(50))
+
+                )
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Text("$steps / $goal Steps")
+
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Row(
+
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+
+        ) {
 
             StatCard(
 
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.weight(1f),
 
-                title = "Activity Time",
+                title = "Distance",
 
-                value = formatDuration(
-                    latestSession?.duration ?: 0L
+                value = String.format(
+                    "%.2f km",
+                    latestSession?.distance ?: 0f
                 ),
 
                 icon = Icons.Default.Person
 
             )
 
-            Spacer(modifier = Modifier.height(30.dp))
+            StatCard(
 
-            Button(
+                modifier = Modifier.weight(1f),
 
-                onClick = {
-                    navController.navigate(Screen.StartWalking.route)
-                },
+                title = "Calories",
 
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
+                value = String.format(
+                    "%.0f kcal",
+                    latestSession?.calories ?: 0f
+                ),
+
+                icon = Icons.Default.Person
+
+            )
+
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        StatCard(
+
+            modifier = Modifier.fillMaxWidth(),
+
+            title = "Activity Time",
+
+            value = formatDuration(
+                latestSession?.duration ?: 0L
+            ),
+
+            icon = Icons.Default.Person
+
+        )
+
+        Spacer(modifier = Modifier.height(30.dp))
+
+        Button(
+
+            onClick = {
+                navController.navigate(Screen.StartWalking.route)
+            },
+
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp)
+
+        ) {
+
+            Text(
+
+                text = "START WALKING",
+
+                fontSize = 18.sp
+
+            )
+
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Card(
+
+            modifier = Modifier.fillMaxWidth()
+
+        ) {
+
+            Column(
+
+                modifier = Modifier.padding(16.dp)
 
             ) {
 
                 Text(
 
-                    text = "START WALKING",
+                    text = "Today's Goal",
 
-                    fontSize = 18.sp
+                    fontWeight = FontWeight.Bold
 
                 )
 
-            }
+                Spacer(modifier = Modifier.height(8.dp))
 
-            Spacer(modifier = Modifier.height(24.dp))
+                Text("Goal : $goal Steps")
 
-            Card(
+                Spacer(modifier = Modifier.height(6.dp))
 
-                modifier = Modifier.fillMaxWidth()
-
-            ) {
-
-                Column(
-
-                    modifier = Modifier.padding(16.dp)
-
-                ) {
-
-                    Text(
-
-                        text = "Today's Goal",
-
-                        fontWeight = FontWeight.Bold
-
-                    )
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Text("Goal : $goal Steps")
-
-                    Spacer(modifier = Modifier.height(6.dp))
-
-                    Text(
-                        "Remaining : ${(goal - steps).coerceAtLeast(0)} Steps"
-                    )
-                }
-
+                Text(
+                    "Remaining : ${(goal - steps).coerceAtLeast(0)} Steps"
+                )
             }
 
         }
 
     }
+
+//    }
 
 }
 
