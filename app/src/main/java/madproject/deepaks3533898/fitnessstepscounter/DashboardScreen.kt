@@ -71,7 +71,6 @@ fun DashboardScreen(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-//                .padding(paddingValues)
             .padding(16.dp)
 
     ) {
