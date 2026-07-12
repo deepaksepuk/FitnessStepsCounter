@@ -35,7 +35,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.stressleveltester.AppUserData
 import kotlinx.coroutines.delay
 import madproject.deepaks3533898.fitnessstepscounter.theme.FitnessStepsCounter
 import madproject.deepaks3533898.fitnessstepscounter.ui.GoalSettingScreen

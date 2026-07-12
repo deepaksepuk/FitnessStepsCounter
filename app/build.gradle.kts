@@ -78,5 +78,9 @@ dependencies {
     ksp("androidx.room:room-compiler:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
 
+    implementation(libs.mpandroidchart)
+
+    implementation(libs.material.icons.extended)
+
 
 }

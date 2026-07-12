@@ -2,7 +2,6 @@ package madproject.deepaks3533898.fitnessstepscounter
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -42,7 +41,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.stressleveltester.AppUserData
 import com.google.firebase.database.FirebaseDatabase
 import kotlin.jvm.java
 

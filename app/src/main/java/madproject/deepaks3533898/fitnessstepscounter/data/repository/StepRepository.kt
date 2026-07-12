@@ -41,4 +41,20 @@ class StepRepository(
         return dao.getGoal()
     }
 
+    suspend fun insertSessions(
+
+        sessions: List<StepSessionEntity>
+
+    ) {
+
+        sessions.forEach {
+
+            dao.insertSession(it)
+
+        }
+
+    }
+
+//    fun getAllSessions() = dao.getAllSessions()
+
 }

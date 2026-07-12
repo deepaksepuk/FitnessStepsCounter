@@ -102,7 +102,8 @@ fun MainScreen() {
 
             composable(BtmScreen.History.route) {
 
-                Text("History BtmScreen")
+
+                StatisticsScreen()
 
             }
 

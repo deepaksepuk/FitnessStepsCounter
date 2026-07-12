@@ -13,6 +13,7 @@ material = "1.13.0"
 activity = "1.12.4"
 navigationCompose = "2.9.7"
 firebaseDatabaseKtx = "21.0.0"
+mpChart = "3.1.0"
 
 
 [libraries]
@@ -35,7 +36,8 @@ material = { group = "com.google.android.material", name = "material", version.r
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 firebase-database-ktx = { group = "com.google.firebase", name = "firebase-database-ktx", version.ref = "firebaseDatabaseKtx" }
-
+material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
+mpandroidchart = { group = "com.github.PhilJay", name = "MPAndroidChart", version.ref = "mpChart" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

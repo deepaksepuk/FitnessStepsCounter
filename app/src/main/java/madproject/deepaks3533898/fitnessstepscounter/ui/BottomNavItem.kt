@@ -21,7 +21,7 @@ sealed class BtmScreen(
 
     object History : BtmScreen(
         "history",
-        "History"
+        "Stats"
     )
 
     object Goal : BtmScreen(
