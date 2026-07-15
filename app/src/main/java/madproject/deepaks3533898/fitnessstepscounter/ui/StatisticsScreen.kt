@@ -16,6 +16,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DirectionsWalk
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.LocalFireDepartment
 import androidx.compose.material.icons.filled.Route
 import androidx.compose.material.icons.filled.ShowChart
@@ -26,10 +28,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -62,7 +63,7 @@ fun StatisticsScreen(
 
         if (!AppUserData.getDataGeneratedStatus(context)) {
             viewModel.insertDummyData()
-            AppUserData.saveDataGeneratedStatus(context,true)
+            AppUserData.saveDataGeneratedStatus(context, true)
         }
 
     }
@@ -73,228 +74,273 @@ fun StatisticsScreen(
 
     }
 
-    Scaffold(
+//    Scaffold(
+//
+//        topBar = {
+//
+//            TopAppBar(
+//
+//                title = {
+//
+//                    Text("Statistics")
+//
+//                }
+//
+//            )
+//
+//        }
+//
+//    ) { padding ->
 
-        topBar = {
+    Column(
 
-            TopAppBar(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(16.dp),
 
-                title = {
+        verticalArrangement = Arrangement.spacedBy(20.dp)
 
-                    Text("Statistics")
+    ) {
 
-                }
+        HeroStatisticsCard()
 
-            )
+        Row(
 
-        }
+            modifier = Modifier.fillMaxWidth(),
 
-    ) { padding ->
-
-        Column(
-
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(padding)
-                .padding(16.dp),
-
-            verticalArrangement = Arrangement.spacedBy(20.dp)
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
 
         ) {
 
-            HeroStatisticsCard()
+            FilterChip(
 
-            Row(
+                selected = selectedTab == 0,
 
-                modifier = Modifier.fillMaxWidth(),
+                onClick = {
 
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    viewModel.changeMode(true)
+                    selectedTab = 0
 
-            ) {
+                },
 
-                FilterChip(
+                label = {
 
-                    selected = selectedTab == 0,
+                    Text("Weekly")
 
-                    onClick = {
+                },
 
-                        selectedTab = 0
+                leadingIcon = {
 
-                    },
+                    Icon(
 
-                    label = {
+                        Icons.Default.ShowChart,
 
-                        Text("Weekly")
-
-                    },
-
-                    leadingIcon = {
-
-                        Icon(
-
-                            Icons.Default.ShowChart,
-
-                            null
-
-                        )
-
-                    },
-
-                    colors = FilterChipDefaults.filterChipColors()
-
-                )
-
-                FilterChip(
-
-                    selected = selectedTab == 1,
-
-                    onClick = {
-
-                        selectedTab = 1
-
-                    },
-
-                    label = {
-
-                        Text("Monthly")
-
-                    },
-
-                    leadingIcon = {
-
-                        Icon(
-
-                            Icons.Default.TrendingUp,
-
-                            null
-
-                        )
-
-                    }
-
-                )
-
-            }
-
-            ChartCard(
-
-                title = if (selectedTab == 0)
-                    "Weekly Progress"
-                else
-                    "Monthly Progress"
-
-            ) {
-
-                if (selectedTab == 0) {
-
-                    FitnessChart(
-
-                        labels = state.weeklyLabels,
-
-                        values = state.weeklySteps,
-
-                        chartType = ChartType.LINE
+                        null
 
                     )
 
-                } else {
+                },
 
-                    FitnessChart(
+                colors = FilterChipDefaults.filterChipColors()
 
-                        labels = state.monthlyLabels,
+            )
 
-                        values = state.monthlySteps,
+            FilterChip(
 
-                        chartType = ChartType.BAR
+                selected = selectedTab == 1,
+
+                onClick = {
+
+                    viewModel.changeMode(false)
+
+                    selectedTab = 1
+
+                },
+
+                label = {
+
+                    Text("Monthly")
+
+                },
+
+                leadingIcon = {
+
+                    Icon(
+
+                        Icons.Default.TrendingUp,
+
+                        null
 
                     )
 
                 }
 
-            }
+            )
 
-            Row(
+        }
 
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ChartCard(
 
-            ) {
+            title = if (selectedTab == 0)
+                "Weekly Progress"
+            else
+                "Monthly Progress"
 
-                SummaryCard(
+        ) {
 
-                    modifier = Modifier.weight(1f),
+            ChartNavigation(
 
-                    title = "Steps",
+                isWeekly = selectedTab == 0,
 
-                    value = state.totalSteps.toString(),
+                title =
+                    if (selectedTab == 0)
+                        state.currentWeekTitle
+                    else
+                        state.currentMonthTitle,
 
-                    icon = Icons.Default.DirectionsWalk
+                canGoNext =
+                    if (selectedTab == 0)
+                        state.canGoNextWeek
+                    else
+                        state.canGoNextMonth,
 
-                )
+                onPrevious = {
 
-                SummaryCard(
+                    if (selectedTab == 0)
 
-                    modifier = Modifier.weight(1f),
+                        viewModel.previousWeek()
+                    else
 
-                    title = "Distance",
+                        viewModel.previousMonth()
 
-                    value = String.format(
-                        "%.1f km",
-                        state.totalDistance
-                    ),
+                },
 
-                    icon = Icons.Default.Route
+                onNext = {
 
-                )
+                    if (selectedTab == 0)
 
-            }
+                        viewModel.nextWeek()
+                    else
 
-            Row(
+                        viewModel.nextMonth()
 
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                }
 
-            ) {
+            )
 
-                SummaryCard(
+            Spacer(
 
-                    modifier = Modifier.weight(1f),
+                modifier = Modifier.height(20.dp)
 
-                    title = "Calories",
+            )
 
-                    value = String.format(
-                        "%.0f kcal",
-                        state.totalCalories
-                    ),
+            FitnessChart(
 
-                    icon = Icons.Default.LocalFireDepartment
+                labels =
+                    if (selectedTab == 0)
+                        state.weeklyLabels
+                    else
+                        state.monthlyLabels,
 
-                )
+                values =
+                    if (selectedTab == 0)
+                        state.weeklySteps
+                    else
+                        state.monthlySteps,
 
-                SummaryCard(
-
-                    modifier = Modifier.weight(1f),
-
-                    title = "Average",
-
-                    value = "${state.averageSteps}",
-
-                    icon = Icons.Default.TrendingUp
-
-                )
-
-            }
-
-            HighestDayCard(
-
-                day = state.highestDay,
-
-                steps = state.highestSteps
+                chartType =
+                    if (selectedTab == 0)
+                        ChartType.LINE
+                    else
+                        ChartType.BAR
 
             )
 
         }
 
+
+        Row(
+
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+
+        ) {
+
+            SummaryCard(
+
+                modifier = Modifier.weight(1f),
+
+                title = "Steps",
+
+                value = state.totalSteps.toString(),
+
+                icon = Icons.Default.DirectionsWalk
+
+            )
+
+            SummaryCard(
+
+                modifier = Modifier.weight(1f),
+
+                title = "Distance",
+
+                value = String.format(
+                    "%.1f km",
+                    state.totalDistance
+                ),
+
+                icon = Icons.Default.Route
+
+            )
+
+        }
+
+        Row(
+
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+
+        ) {
+
+            SummaryCard(
+
+                modifier = Modifier.weight(1f),
+
+                title = "Calories",
+
+                value = String.format(
+                    "%.0f kcal",
+                    state.totalCalories
+                ),
+
+                icon = Icons.Default.LocalFireDepartment
+
+            )
+
+            SummaryCard(
+
+                modifier = Modifier.weight(1f),
+
+                title = "Average",
+
+                value = "${state.averageSteps}",
+
+                icon = Icons.Default.TrendingUp
+
+            )
+
+        }
+
+        HighestDayCard(
+
+            day = state.highestDay,
+
+            steps = state.highestSteps
+
+        )
+
     }
+
+//    }
 
 }
 
@@ -324,19 +370,19 @@ fun HeroStatisticsCard() {
 
         ) {
 
-            Icon(
-
-                imageVector = Icons.Default.ShowChart,
-
-                contentDescription = null,
-
-                modifier = Modifier.size(60.dp),
-
-                tint = MaterialTheme.colorScheme.primary
-
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
+//            Icon(
+//
+//                imageVector = Icons.Default.ShowChart,
+//
+//                contentDescription = null,
+//
+//                modifier = Modifier.size(60.dp),
+//
+//                tint = MaterialTheme.colorScheme.primary
+//
+//            )
+//
+//            Spacer(modifier = Modifier.height(16.dp))
 
             Text(
 
@@ -479,6 +525,108 @@ fun SummaryCard(
                 fontSize = 22.sp,
 
                 fontWeight = FontWeight.Bold
+
+            )
+
+        }
+
+    }
+
+}
+
+@Composable
+fun ChartNavigation(
+
+    isWeekly: Boolean,
+
+    title: String,
+
+    canGoNext: Boolean,
+
+    onPrevious: () -> Unit,
+
+    onNext: () -> Unit
+
+) {
+
+    Row(
+
+        modifier = Modifier.fillMaxWidth(),
+
+        verticalAlignment = Alignment.CenterVertically,
+
+        horizontalArrangement =
+            Arrangement.SpaceBetween
+
+    ) {
+
+        IconButton(
+
+            onClick = onPrevious
+
+        ) {
+
+            Icon(
+
+                Icons.Default.KeyboardArrowLeft,
+
+                null
+
+            )
+
+        }
+
+        Column(
+
+            horizontalAlignment =
+                Alignment.CenterHorizontally
+
+        ) {
+
+            Text(
+
+                if (isWeekly)
+                    "Week"
+                else
+                    "Month",
+
+                color =
+                    MaterialTheme.colorScheme.primary
+
+            )
+
+            Spacer(
+
+                modifier = Modifier.height(4.dp)
+
+            )
+
+            Text(
+
+                title,
+
+                fontWeight =
+                    FontWeight.Bold,
+
+                fontSize = 18.sp
+
+            )
+
+        }
+
+        IconButton(
+
+            enabled = canGoNext,
+
+            onClick = onNext
+
+        ) {
+
+            Icon(
+
+                Icons.Default.KeyboardArrowRight,
+
+                null
 
             )
 

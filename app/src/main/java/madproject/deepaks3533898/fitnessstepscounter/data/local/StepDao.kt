@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -14,6 +15,12 @@ interface StepDao {
     suspend fun insertSession(
         session: StepSessionEntity
     )
+
+    @Query("SELECT * FROM step_sessions WHERE date = :date LIMIT 1")
+    suspend fun getSessionByDate(date: String): StepSessionEntity?
+
+    @Update
+    suspend fun updateSession(session: StepSessionEntity)
 
     @Query("SELECT * FROM step_sessions ORDER BY id DESC")
     fun getAllSessions(): Flow<List<StepSessionEntity>>

@@ -359,7 +359,7 @@ fun StartWalkingScreen(
 
                 Spacer(modifier = Modifier.size(8.dp))
 
-                Text("RESET")
+                Text("Save and Reset")
 
             }
 

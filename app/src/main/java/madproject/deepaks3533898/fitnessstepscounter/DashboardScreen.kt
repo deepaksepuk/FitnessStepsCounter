@@ -57,7 +57,7 @@ fun DashboardScreen(
 //    val goal by goalViewModel.goal.collectAsState()
 
 
-    val goalState by viewModel.goal.collectAsState()
+    val goalState by goalViewModel.uiState.collectAsState()
 
     val goal = goalState.stepGoal
 

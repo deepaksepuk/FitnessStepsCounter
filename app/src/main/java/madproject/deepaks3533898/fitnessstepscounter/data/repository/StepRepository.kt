@@ -21,6 +21,14 @@ class StepRepository(
 
     }
 
+    suspend fun getSessionByDate(date: String): StepSessionEntity? {
+        return dao.getSessionByDate(date)
+    }
+
+    suspend fun updateSession(session: StepSessionEntity) {
+        dao.updateSession(session)
+    }
+
     fun getLatestSession(): Flow<StepSessionEntity?> {
         return dao.getLatestSession()
     }

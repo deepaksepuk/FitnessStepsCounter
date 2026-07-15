@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -15,7 +16,7 @@ import madproject.deepaks3533898.fitnessstepscounter.DashboardScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen() {
+fun MainScreen(mainNavController: NavHostController) {
 
     val navController = rememberNavController()
 
@@ -90,15 +91,15 @@ fun MainScreen() {
 
             composable(BtmScreen.Home.route) {
 
-                DashboardScreen(navController)
+                DashboardScreen(mainNavController)
 
             }
 
-            composable(BtmScreen.StartWalking.route) {
-
-                StartWalkingScreen(navController)
-
-            }
+//            composable(BtmScreen.StartWalking.route) {
+//
+//                StartWalkingScreen(navController)
+//
+//            }
 
             composable(BtmScreen.History.route) {
 
@@ -109,7 +110,6 @@ fun MainScreen() {
 
             composable(BtmScreen.Goal.route) {
 
-                Text("Goal BtmScreen")
 
                 GoalSettingScreen()
 
@@ -118,8 +118,6 @@ fun MainScreen() {
             composable(BtmScreen.BMI.route) {
 
                 BMIScreen()
-
-//                Text("BMI BtmScreen")
 
             }
 

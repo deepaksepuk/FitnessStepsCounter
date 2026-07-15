@@ -2,6 +2,7 @@ package madproject.deepaks3533898.fitnessstepscounter.viewmodel
 
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
@@ -47,7 +48,84 @@ class StepTrackerViewModel(
 
     )
 
-    private fun saveSession() {
+    private fun saveSession(sessionState: StepTrackerState) {
+
+        viewModelScope.launch {
+
+            val formatter = SimpleDateFormat(
+                "dd/MM/yyyy",
+                Locale.getDefault()
+            )
+
+            val today = formatter.format(Date())
+
+            val existing =
+                repository.getSessionByDate(today)
+
+
+            Log.e("STEP_DEBUG", "Existing = $existing")
+
+            Log.e(
+                "STEP_DEBUG",
+                "Old Steps = ${existing?.steps}, New Session = ${sessionState.steps}"
+            )
+
+            if (existing == null) {
+
+                repository.insertSession(
+
+                    StepSessionEntity(
+
+                        date = today,
+
+                        steps = sessionState.steps,
+
+                        distance = sessionState.distanceKm,
+
+                        calories = sessionState.calories,
+
+                        duration = sessionState.durationSeconds
+
+                    )
+
+                )
+
+            } else {
+
+                val updated = existing.copy(
+
+                    steps =
+                        existing.steps + sessionState.steps,
+
+                    distance =
+                        existing.distance + sessionState.distanceKm,
+
+                    calories =
+                        existing.calories + sessionState.calories,
+
+                    duration =
+                        existing.duration + sessionState.durationSeconds
+
+                )
+
+                repository.updateSession(updated)
+
+                Log.d(
+                    "STEP_DEBUG",
+                    "Updated Steps = ${updated.steps}"
+                )
+
+
+            }
+
+
+
+
+        }
+
+    }
+
+    private fun saveSessionOld() {
 
         viewModelScope.launch {
 
@@ -165,9 +243,18 @@ class StepTrackerViewModel(
 
         initialSensorValue = null
 
-        if (_uiState.value.steps > 0) {
+//        if (_uiState.value.steps > 0) {
+//
+//            saveSession()
+//
+//        }
 
-            saveSession()
+
+        val session = _uiState.value
+
+        if (session.steps > 0) {
+
+            saveSession(session)
 
         }
 

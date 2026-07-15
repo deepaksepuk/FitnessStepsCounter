@@ -1,11 +1,12 @@
 package madproject.deepaks3533898.fitnessstepscounter.ui
 
-import androidx.compose.ui.unit.dp
 import android.graphics.Color
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart
@@ -17,7 +18,6 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 
 enum class ChartType {
     LINE,
@@ -35,164 +35,188 @@ fun FitnessChart(
 
 ) {
 
-    if (chartType == ChartType.LINE) {
+    key(chartType, labels) {
 
-        AndroidView(
+        if (chartType == ChartType.LINE) {
 
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(300.dp),
+            AndroidView(
 
-            factory = { context ->
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(300.dp),
 
-                LineChart(context).apply {
+                factory = { context ->
 
-                    description.isEnabled = false
+                    LineChart(context).apply {
 
-                    legend.isEnabled = false
+                        description.isEnabled = false
 
-                    setTouchEnabled(true)
+                        legend.isEnabled = false
 
-                    setPinchZoom(true)
+                        setTouchEnabled(true)
 
-                    animateX(1000)
+                        setPinchZoom(true)
 
-                    axisRight.isEnabled = false
+                        axisRight.isEnabled = false
 
-                    xAxis.position =
-                        XAxis.XAxisPosition.BOTTOM
+                        axisLeft.axisMinimum = 0f
 
-                    xAxis.granularity = 1f
+                        xAxis.position =
+                            XAxis.XAxisPosition.BOTTOM
 
-                    xAxis.valueFormatter =
-                        IndexAxisValueFormatter(labels)
+                        xAxis.granularity = 1f
 
-                    axisLeft.axisMinimum = 0f
-
-                }
-
-            },
-
-            update = { chart ->
-
-                val entries =
-                    values.mapIndexed { index, value ->
-
-                        Entry(
-
-                            index.toFloat(),
-
-                            value.toFloat()
-
-                        )
+                        xAxis.isGranularityEnabled = true
 
                     }
 
-                val dataSet =
-                    LineDataSet(
+                },
 
-                        entries,
+                update = { chart ->
 
-                        "Steps"
+                    val entries =
+                        values.mapIndexed { index, value ->
 
-                    )
+                            Entry(
+                                index.toFloat(),
+                                value.toFloat()
+                            )
 
-                dataSet.color =
-                    Color.parseColor("#4CAF50")
+                        }
 
-                dataSet.lineWidth = 3f
+                    val dataSet =
+                        LineDataSet(
+                            entries,
+                            "Steps"
+                        ).apply {
 
-                dataSet.circleRadius = 5f
+                            color =
+                                Color.parseColor("#4CAF50")
 
-                dataSet.setCircleColor(
-                    Color.parseColor("#4CAF50")
-                )
+                            lineWidth = 3f
 
-                dataSet.valueTextSize = 11f
+                            circleRadius = 5f
 
-                dataSet.mode =
-                    LineDataSet.Mode.CUBIC_BEZIER
+                            setCircleColor(
+                                Color.parseColor("#4CAF50")
+                            )
 
-                chart.data =
-                    LineData(dataSet as ILineDataSet?)
+                            valueTextSize = 11f
 
-                chart.invalidate()
+                            mode =
+                                LineDataSet.Mode.CUBIC_BEZIER
 
-            }
+                        }
 
-        )
+                    chart.xAxis.apply {
 
-    } else {
+                        valueFormatter =
+                            IndexAxisValueFormatter(labels)
 
-        AndroidView(
+                        labelCount = labels.size
 
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(300.dp),
+                        granularity = 1f
 
-            factory = { context ->
+                        isGranularityEnabled = true
 
-                BarChart(context).apply {
-
-                    description.isEnabled = false
-
-                    legend.isEnabled = false
-
-                    animateY(1000)
-
-                    axisRight.isEnabled = false
-
-                    xAxis.position =
-                        XAxis.XAxisPosition.BOTTOM
-
-                    xAxis.granularity = 1f
-
-                    xAxis.valueFormatter =
-                        IndexAxisValueFormatter(labels)
-
-                    axisLeft.axisMinimum = 0f
-
-                }
-
-            },
-
-            update = { chart ->
-
-                val entries =
-                    values.mapIndexed { index, value ->
-
-                        BarEntry(
-
-                            index.toFloat(),
-
-                            value.toFloat()
-
-                        )
+                        setAvoidFirstLastClipping(true)
 
                     }
 
-                val dataSet =
-                    BarDataSet(
+                    chart.data =
+                        LineData(dataSet)
 
-                        entries,
+                    chart.notifyDataSetChanged()
 
-                        "Steps"
+                    chart.invalidate()
 
-                    )
+                }
 
-                dataSet.color =
-                    Color.parseColor("#2196F3")
+            )
 
-                dataSet.valueTextSize = 11f
+        } else {
 
-                chart.data =
-                    BarData(dataSet)
+            AndroidView(
 
-                chart.invalidate()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(300.dp),
 
-            }
+                factory = { context ->
 
-        )
+                    BarChart(context).apply {
+
+                        description.isEnabled = false
+
+                        legend.isEnabled = false
+
+                        axisRight.isEnabled = false
+
+                        axisLeft.axisMinimum = 0f
+
+                        xAxis.position =
+                            XAxis.XAxisPosition.BOTTOM
+
+                        xAxis.granularity = 1f
+
+                        xAxis.isGranularityEnabled = true
+
+                    }
+
+                },
+
+                update = { chart ->
+
+                    val entries =
+                        values.mapIndexed { index, value ->
+
+                            BarEntry(
+                                index.toFloat(),
+                                value.toFloat()
+                            )
+
+                        }
+
+                    val dataSet =
+                        BarDataSet(
+                            entries,
+                            "Steps"
+                        ).apply {
+
+                            color =
+                                Color.parseColor("#2196F3")
+
+                            valueTextSize = 11f
+
+                        }
+
+                    chart.xAxis.apply {
+
+                        valueFormatter =
+                            IndexAxisValueFormatter(labels)
+
+                        labelCount = labels.size
+
+                        granularity = 1f
+
+                        isGranularityEnabled = true
+
+                        setAvoidFirstLastClipping(true)
+
+                    }
+
+                    chart.data =
+                        BarData(dataSet)
+
+                    chart.notifyDataSetChanged()
+
+                    chart.invalidate()
+
+                }
+
+            )
+
+        }
 
     }
 

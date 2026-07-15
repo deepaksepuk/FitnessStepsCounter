@@ -112,9 +112,7 @@ fun AppNavigationMain() {
         }
 
         composable(Screen.Home.route) {
-//            DashboardScreen(navController)
-
-            MainScreen()
+            MainScreen(navController)
         }
 
 
