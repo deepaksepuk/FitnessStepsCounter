@@ -1,5 +1,6 @@
 package madproject.deepaks3533898.fitnessstepscounter.ui
 
+import android.R.attr.padding
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -57,30 +58,29 @@ fun BMIScreen() {
         mutableStateOf("")
     }
 
-    Scaffold(
-
-        topBar = {
-
-            TopAppBar(
-
-                title = {
-
-                    Text("BMI Calculator")
-
-                }
-
-            )
-
-        }
-
-    ) { padding ->
+//    Scaffold(
+//
+//        topBar = {
+//
+//            TopAppBar(
+//
+//                title = {
+//
+//                    Text("BMI Calculator")
+//
+//                }
+//
+//            )
+//
+//        }
+//
+//    ) { padding ->
 
         Column(
 
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .padding(padding)
                 .padding(16.dp),
 
             verticalArrangement = Arrangement.spacedBy(20.dp)
@@ -302,7 +302,7 @@ fun BMIScreen() {
 
         }
 
-    }
+//    }
 
 }
 

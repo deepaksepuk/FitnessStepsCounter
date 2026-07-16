@@ -9,7 +9,8 @@ import androidx.room.RoomDatabase
     entities = [
 
         StepSessionEntity::class,
-                GoalEntity::class
+        GoalEntity::class,
+        WaterEntity::class
 
 
     ],

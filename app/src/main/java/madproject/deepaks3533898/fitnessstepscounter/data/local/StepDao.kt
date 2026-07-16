@@ -38,4 +38,14 @@ interface StepDao {
     @Query("SELECT * FROM goal_settings WHERE id = 1")
     fun getGoal(): Flow<GoalEntity?>
 
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun saveWater(
+        water: WaterEntity
+    )
+
+    @Query("SELECT * FROM water_intake WHERE date = :date LIMIT 1")
+    fun getWaterByDate(
+        date: String
+    ): Flow<WaterEntity?>
 }

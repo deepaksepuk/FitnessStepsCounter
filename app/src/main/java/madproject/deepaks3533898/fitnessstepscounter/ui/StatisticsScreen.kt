@@ -1,6 +1,9 @@
 package madproject.deepaks3533898.fitnessstepscounter.ui
 
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,6 +18,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.DirectionsWalk
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
@@ -40,6 +45,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -99,7 +106,7 @@ fun StatisticsScreen(
             .verticalScroll(rememberScrollState())
             .padding(16.dp),
 
-        verticalArrangement = Arrangement.spacedBy(20.dp)
+        verticalArrangement = Arrangement.spacedBy(12.dp)
 
     ) {
 
@@ -107,76 +114,51 @@ fun StatisticsScreen(
 
         Row(
 
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(18.dp))
+                .background(Color(0xFFF3F6FB))
+                .padding(4.dp),
 
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
 
         ) {
 
-            FilterChip(
+            StatisticsTab(
+
+                modifier = Modifier.weight(1f),
 
                 selected = selectedTab == 0,
 
-                onClick = {
+                title = "Weekly",
 
-                    viewModel.changeMode(true)
-                    selectedTab = 0
+                icon = Icons.Default.DateRange
 
-                },
+            ) {
 
-                label = {
+                selectedTab = 0
 
-                    Text("Weekly")
+                viewModel.changeMode(true)
 
-                },
+            }
 
-                leadingIcon = {
+            StatisticsTab(
 
-                    Icon(
-
-                        Icons.Default.ShowChart,
-
-                        null
-
-                    )
-
-                },
-
-                colors = FilterChipDefaults.filterChipColors()
-
-            )
-
-            FilterChip(
+                modifier = Modifier.weight(1f),
 
                 selected = selectedTab == 1,
 
-                onClick = {
+                title = "Monthly",
 
-                    viewModel.changeMode(false)
+                icon = Icons.Default.CalendarMonth
 
-                    selectedTab = 1
+            ) {
 
-                },
+                selectedTab = 1
 
-                label = {
+                viewModel.changeMode(false)
 
-                    Text("Monthly")
-
-                },
-
-                leadingIcon = {
-
-                    Icon(
-
-                        Icons.Default.TrendingUp,
-
-                        null
-
-                    )
-
-                }
-
-            )
+            }
 
         }
 
@@ -346,6 +328,123 @@ fun StatisticsScreen(
 
 
 @Composable
+fun StatisticsTab(
+
+    modifier: Modifier = Modifier,
+
+    selected: Boolean,
+
+    title: String,
+
+    icon: ImageVector,
+
+    onClick: () -> Unit
+
+) {
+
+    val background by animateColorAsState(
+
+        if (selected)
+
+            MaterialTheme.colorScheme.primary
+
+        else
+
+            Color.Transparent,
+
+        label = ""
+
+    )
+
+    val textColor by animateColorAsState(
+
+        if (selected)
+
+            Color.White
+
+        else
+
+            MaterialTheme.colorScheme.primary,
+
+        label = ""
+
+    )
+
+    Card(
+
+        modifier = modifier
+            .height(52.dp)
+            .clickable {
+
+                onClick()
+
+            },
+
+        colors = CardDefaults.cardColors(
+
+            containerColor = background
+
+        ),
+
+        elevation = CardDefaults.cardElevation(
+
+            defaultElevation =
+
+                if (selected) 4.dp else 0.dp
+
+        ),
+
+        shape = RoundedCornerShape(14.dp)
+
+    ) {
+
+        Row(
+
+            modifier = Modifier.fillMaxSize(),
+
+            horizontalArrangement = Arrangement.Center,
+
+            verticalAlignment = Alignment.CenterVertically
+
+        ) {
+
+            Icon(
+
+                imageVector = icon,
+
+                contentDescription = null,
+
+                tint = textColor,
+
+                modifier = Modifier.size(20.dp)
+
+            )
+
+            Spacer(
+
+                Modifier.width(8.dp)
+
+            )
+
+            Text(
+
+                text = title,
+
+                color = textColor,
+
+                fontWeight = FontWeight.SemiBold,
+
+                fontSize = 15.sp
+
+            )
+
+        }
+
+    }
+
+}
+
+@Composable
 fun HeroStatisticsCard() {
 
     Card(
@@ -370,19 +469,6 @@ fun HeroStatisticsCard() {
 
         ) {
 
-//            Icon(
-//
-//                imageVector = Icons.Default.ShowChart,
-//
-//                contentDescription = null,
-//
-//                modifier = Modifier.size(60.dp),
-//
-//                tint = MaterialTheme.colorScheme.primary
-//
-//            )
-//
-//            Spacer(modifier = Modifier.height(16.dp))
 
             Text(
 

@@ -5,7 +5,12 @@
 
 
     <color name="SoftBlue">#89ABE3</color>
-    <color name="CoralRose">#EA738D</color>
+    <color name="CoralRose">#0e0d12</color>
+<!--    <color name="CoralRose">#EA738D</color>-->
+
+<!--    #0e0d12-->
+
+<!--    #6001e9-->
 
 
     <color name="bttm_navbar">#070f34</color>

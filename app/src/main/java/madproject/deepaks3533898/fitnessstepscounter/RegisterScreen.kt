@@ -19,7 +19,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Height
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.MonitorWeight
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -51,8 +54,10 @@ import com.google.firebase.database.FirebaseDatabase
 fun CreateAccountScreen(onBackToLogin: () -> Unit) {
 
     var jsfullname by remember { mutableStateOf("") }
-    var age by remember { mutableStateOf("") }
     var jsemail by remember { mutableStateOf("") }
+    var age by remember { mutableStateOf("") }
+    var jsheight by remember { mutableStateOf("") }
+    var jsweight by remember { mutableStateOf("") }
     var jspassword by remember { mutableStateOf("") }
     var jsconfirmpassword by remember { mutableStateOf("") }
 
@@ -126,42 +131,6 @@ fun CreateAccountScreen(onBackToLogin: () -> Unit) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 12.dp),
-                value = age,
-                onValueChange = { age = it },
-                label = { Text("Enter Profession") },
-                colors = TextFieldDefaults.colors(
-                    unfocusedContainerColor = Color.White,
-                    focusedContainerColor = Color.White,
-                ),
-                shape = RoundedCornerShape(32.dp),
-                leadingIcon = {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Spacer(modifier = Modifier.width(6.dp))
-
-                        Image(
-                            modifier = Modifier
-                                .width(24.dp)
-                                .height(24.dp),
-                            painter = painterResource(id = R.drawable.ic_fitness_steps_counter),
-                            contentDescription = "Profession",
-                        )
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Spacer(
-                            modifier = Modifier
-                                .width(3.dp) // Width of the line
-                                .height(24.dp) // Adjust height as needed
-                                .background(Color.Gray) // Color of the line
-                        )
-                    }
-                },
-            )
-
-            Spacer(modifier = Modifier.height(0.dp))
-
-            OutlinedTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 12.dp),
                 value = jsemail,
                 onValueChange = { jsemail = it },
                 label = { Text("Enter Email") },
@@ -188,6 +157,105 @@ fun CreateAccountScreen(onBackToLogin: () -> Unit) {
                     }
                 },
             )
+
+            Spacer(modifier = Modifier.height(0.dp))
+
+            OutlinedTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 12.dp),
+                value = age,
+                onValueChange = { age = it },
+                label = { Text("Enter Age") },
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = Color.White,
+                    focusedContainerColor = Color.White,
+                ),
+                shape = RoundedCornerShape(32.dp),
+                leadingIcon = {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Spacer(modifier = Modifier.width(6.dp))
+
+                        Icon(
+                            imageVector = Icons.Default.Person, // Replace with desired icon
+                            contentDescription = "Age Icon"
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Spacer(
+                            modifier = Modifier
+                                .width(3.dp) // Width of the line
+                                .height(24.dp) // Adjust height as needed
+                                .background(Color.Gray) // Color of the line
+                        )
+                    }
+                },
+            )
+
+            Spacer(modifier = Modifier.height(0.dp))
+
+            OutlinedTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 12.dp),
+                value = jsheight,
+                onValueChange = { jsheight = it },
+                label = { Text("Enter Height(Cms)") },
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = Color.White,
+                    focusedContainerColor = Color.White,
+                ),
+                shape = RoundedCornerShape(32.dp),
+                leadingIcon = {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Spacer(modifier = Modifier.width(6.dp))
+
+                        Icon(
+                            imageVector = Icons.Default.Height, // Replace with desired icon
+                            contentDescription = "Height Icon"
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Spacer(
+                            modifier = Modifier
+                                .width(3.dp) // Width of the line
+                                .height(24.dp) // Adjust height as needed
+                                .background(Color.Gray) // Color of the line
+                        )
+                    }
+                },
+            )
+
+            OutlinedTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 12.dp),
+                value = jsweight,
+                onValueChange = { jsweight = it },
+                label = { Text("Enter Weight (Kgs)") },
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = Color.White,
+                    focusedContainerColor = Color.White,
+                ),
+                shape = RoundedCornerShape(32.dp),
+                leadingIcon = {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Spacer(modifier = Modifier.width(6.dp))
+
+                        Icon(
+                            imageVector = Icons.Default.MonitorWeight, // Replace with desired icon
+                            contentDescription = "Weight Icon"
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Spacer(
+                            modifier = Modifier
+                                .width(3.dp) // Width of the line
+                                .height(24.dp) // Adjust height as needed
+                                .background(Color.Gray) // Color of the line
+                        )
+                    }
+                },
+            )
+
+
 
             Spacer(modifier = Modifier.height(0.dp))
 
@@ -237,6 +305,13 @@ fun CreateAccountScreen(onBackToLogin: () -> Unit) {
                         age.isEmpty() -> {
                             Toast.makeText(context, " Please Enter Age", Toast.LENGTH_SHORT).show()
                         }
+
+                        jsheight.isEmpty() -> {
+                            Toast.makeText(context, " Please Enter Height", Toast.LENGTH_SHORT).show()
+                        }
+                        jsweight.isEmpty() -> {
+                            Toast.makeText(context, " Please Enter Weight", Toast.LENGTH_SHORT).show()
+                        }
                         jspassword.isEmpty() -> {
                             Toast.makeText(context, " Please Enter Password", Toast.LENGTH_SHORT).show()
                         }
@@ -246,6 +321,8 @@ fun CreateAccountScreen(onBackToLogin: () -> Unit) {
                                 jsfullname,
                                 jsemail,
                                 age,
+                                jsheight,
+                                jsweight,
                                 jspassword
                             )
                             registerTester(testerData,context,onBackToLogin)
@@ -305,7 +382,7 @@ fun CreateAccountScreen(onBackToLogin: () -> Unit) {
 fun registerTester(testerData: TesterData, context: Context,onRegistered: () -> Unit) {
 
     val firebaseDatabase = FirebaseDatabase.getInstance()
-    val databaseReference = firebaseDatabase.getReference("TesterData")
+    val databaseReference = firebaseDatabase.getReference("UsersData")
 
     databaseReference.child(testerData.emailid.replace(".", ","))
         .setValue(testerData)
@@ -337,5 +414,7 @@ data class TesterData(
     var name : String = "",
     var emailid : String = "",
     var age : String = "",
+    var height : String = "",
+    var weight : String = "",
     var password: String = ""
 )

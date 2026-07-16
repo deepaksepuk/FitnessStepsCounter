@@ -18,15 +18,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.DirectionsWalk
+import androidx.compose.material.icons.filled.LocalFireDepartment
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Route
+import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -39,22 +43,22 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
-import androidx.navigation.NavController
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import madproject.deepaks3533898.fitnessstepscounter.StatCard
 import madproject.deepaks3533898.fitnessstepscounter.viewmodel.StepTrackerViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -110,7 +114,10 @@ fun StartWalkingScreen(
             TopAppBar(
 
                 title = {
-                    Text("Start Walking")
+                    Text(
+                        "Start Walking",
+                        fontWeight = FontWeight.Bold,
+                    )
                 },
 
                 navigationIcon = {
@@ -181,7 +188,7 @@ fun StartWalkingScreen(
 
                     Icon(
 
-                        imageVector = Icons.Default.Person,
+                        imageVector = Icons.Default.DirectionsWalk,
 
                         contentDescription = null,
 
@@ -217,27 +224,59 @@ fun StartWalkingScreen(
 
             ) {
 
-                FitnessCard(
+//                FitnessCard(
+//
+//                    modifier = Modifier.weight(1f),
+//
+//                    title = "Distance",
+//
+//                    value = String.format("%.2f km", state.distanceKm),
+//
+//                    icon = Icons.Default.Person
+//
+//                )
+
+                StatCard(
 
                     modifier = Modifier.weight(1f),
 
-                    title = "Distance",
+                    title = "Distance\nCovered",
 
-                    value = String.format("%.2f km", state.distanceKm),
+                    value = String.format("%.2f", state.distanceKm),
 
-                    icon = Icons.Default.Person
+                    unit = "km",
+
+                    icon = Icons.Default.Route,
+
+                    iconBackground = Color(0xFFE8F5E9)
 
                 )
 
-                FitnessCard(
+//                FitnessCard(
+//
+//                    modifier = Modifier.weight(1f),
+//
+//                    title = "Calories",
+//
+//                    value = String.format("%.0f kcal", state.calories),
+//
+//                    icon = Icons.Default.Person
+//
+//                )
+
+                StatCard(
 
                     modifier = Modifier.weight(1f),
 
-                    title = "Calories",
+                    title = "Calories\nBurnt",
 
-                    value = String.format("%.0f kcal", state.calories),
+                    value = String.format("%.0f", state.calories),
 
-                    icon = Icons.Default.Person
+                    unit = "kCal",
+
+                    icon = Icons.Default.LocalFireDepartment,
+
+                    iconBackground = Color(0xFFFFF3E0)
 
                 )
 
@@ -253,7 +292,7 @@ fun StartWalkingScreen(
 
                 value = formatTime(state.durationSeconds),
 
-                icon = Icons.Default.Person
+                icon = Icons.Default.Timer
 
             )
 
@@ -329,7 +368,6 @@ fun StartWalkingScreen(
 
                     if (state.isTracking)
                         viewModel.pauseTracking()
-
                     else
                         viewModel.resumeTracking()
 
@@ -418,17 +456,19 @@ fun FitnessCard(
 
         colors = CardDefaults.cardColors(
 
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
+            containerColor = MaterialTheme.colorScheme.surface
 
         )
 
+
+
     ) {
 
-        Column(
+        Row(
 
             modifier = Modifier.padding(16.dp),
 
-            horizontalAlignment = Alignment.CenterHorizontally
+            verticalAlignment = Alignment.CenterVertically
 
         ) {
 
@@ -442,7 +482,7 @@ fun FitnessCard(
 
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.width(8.dp))
 
             Text(
 
@@ -452,7 +492,7 @@ fun FitnessCard(
 
             )
 
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.weight(1f))
 
             Text(
 

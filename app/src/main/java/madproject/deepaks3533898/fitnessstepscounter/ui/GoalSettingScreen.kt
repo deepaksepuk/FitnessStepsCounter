@@ -1,5 +1,6 @@
 package madproject.deepaks3533898.fitnessstepscounter.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,6 +16,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DirectionsWalk
+import androidx.compose.material.icons.filled.LocalFireDepartment
+import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -38,10 +42,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import madproject.deepaks3533898.fitnessstepscounter.R
 import madproject.deepaks3533898.fitnessstepscounter.viewmodel.GoalViewModel
 import madproject.deepaks3533898.fitnessstepscounter.viewmodel.UiEvent
 
@@ -67,36 +73,13 @@ fun GoalSettingScreen(
         SnackbarHostState()
     }
 
-    Scaffold(
 
-        snackbarHost = {
-
-            SnackbarHost(snackbarHostState)
-
-        },
-
-        topBar = {
-
-            TopAppBar(
-
-                title = {
-
-                    Text("Goal Settings")
-
-                }
-
-            )
-
-        }
-
-    ) { padding ->
 
         Column(
 
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .padding(padding)
                 .padding(16.dp),
 
             verticalArrangement = Arrangement.spacedBy(20.dp)
@@ -136,14 +119,10 @@ fun GoalSettingScreen(
 
                     ) {
 
-                        Icon(
+                        Image(
 
-                            Icons.Default.Settings,
-
+                            painter = painterResource(id = R.drawable.ic_goal_walk),
                             contentDescription = null,
-
-                            tint = MaterialTheme.colorScheme.onPrimary,
-
                             modifier = Modifier.size(36.dp)
 
                         )
@@ -180,7 +159,7 @@ fun GoalSettingScreen(
 
                 title = "Daily Step Goal",
 
-                icon = Icons.Default.Settings
+                icon = Icons.Default.DirectionsWalk
 
             ) {
 
@@ -212,7 +191,7 @@ fun GoalSettingScreen(
 
                 title = "Daily Calorie Goal",
 
-                icon = Icons.Default.Settings
+                icon = Icons.Default.LocalFireDepartment
 
             ) {
 
@@ -270,7 +249,7 @@ fun GoalSettingScreen(
 
                 Icon(
 
-                    Icons.Default.Settings,
+                    Icons.Default.Save,
 
                     contentDescription = null
 
@@ -290,7 +269,7 @@ fun GoalSettingScreen(
 
         }
 
-    }
+//    }
 
     LaunchedEffect(Unit) {
 

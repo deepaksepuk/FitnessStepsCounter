@@ -4,6 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import madproject.deepaks3533898.fitnessstepscounter.data.local.GoalEntity
 import madproject.deepaks3533898.fitnessstepscounter.data.local.StepDao
 import madproject.deepaks3533898.fitnessstepscounter.data.local.StepSessionEntity
+import madproject.deepaks3533898.fitnessstepscounter.data.local.WaterEntity
 
 class StepRepository(
 
@@ -63,6 +64,22 @@ class StepRepository(
 
     }
 
+
+    suspend fun saveWater(
+        water: WaterEntity
+    ) {
+
+        dao.saveWater(water)
+
+    }
+
+    fun getWaterByDate(
+        date: String
+    ): Flow<WaterEntity?> {
+
+        return dao.getWaterByDate(date)
+
+    }
 //    fun getAllSessions() = dao.getAllSessions()
 
 }

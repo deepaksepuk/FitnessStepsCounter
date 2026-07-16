@@ -3,6 +3,7 @@ package madproject.deepaks3533898.fitnessstepscounter
 import android.app.Activity
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -37,13 +39,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.firebase.database.FirebaseDatabase
-import kotlin.jvm.java
-
 
 
 @Composable
@@ -64,6 +65,16 @@ fun UserLoginScreen(
     ) {
 
         Spacer(modifier = Modifier.weight(0.5f))
+
+        Image(
+            modifier = Modifier
+                .size(94.dp)
+                .align(Alignment.CenterHorizontally),
+            painter = painterResource(id = R.drawable.fitness_icon),
+            contentDescription = "Fitness Steps Counter",
+        )
+
+        Spacer(modifier = Modifier.height(18.dp))
 
         Text(
             text = "Fitness Steps Counter",
@@ -167,10 +178,11 @@ fun UserLoginScreen(
                                 "",
                                 testerMail,
                                 "",
+                                "", "",
                                 testerPassword
                             )
 
-                            loginTester(testerData,context,onLoginSuccess)
+                            loginTester(testerData, context, onLoginSuccess)
                         }
 
                     }
@@ -224,10 +236,11 @@ fun UserLoginScreen(
     }
 }
 
-fun loginTester(testerData: TesterData, context: Context,onLoginSuccess: () -> Unit) {
+fun loginTester(testerData: TesterData, context: Context, onLoginSuccess: () -> Unit) {
 
     val firebaseDatabase = FirebaseDatabase.getInstance()
-    val databaseReference = firebaseDatabase.getReference("TesterData").child(testerData.emailid.replace(".", ","))
+    val databaseReference =
+        firebaseDatabase.getReference("UsersData").child(testerData.emailid.replace(".", ","))
 
     databaseReference.get().addOnCompleteListener { task ->
         if (task.isSuccessful) {
@@ -236,13 +249,14 @@ fun loginTester(testerData: TesterData, context: Context,onLoginSuccess: () -> U
                 if (dbData.password == testerData.password) {
 
                     AppUserData.saveLoginStatus(context, true)
-                    AppUserData.saveUserName(context, dbData.emailid)
-                    AppUserData.saveUserEmail(context, dbData.name)
+                    AppUserData.saveUserName(context, dbData.name)
+                    AppUserData.saveUserEmail(context, dbData.emailid)
 
                     onLoginSuccess.invoke()
 
                 } else {
-                    Toast.makeText(context, "Seems Incorrect Credentials", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Seems Incorrect Credentials", Toast.LENGTH_SHORT)
+                        .show()
                 }
             } else {
                 Toast.makeText(context, "Your account not found", Toast.LENGTH_SHORT).show()

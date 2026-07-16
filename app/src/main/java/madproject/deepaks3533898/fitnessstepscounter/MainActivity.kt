@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -70,7 +71,6 @@ fun AppNavigationMain() {
         navController = navController,
         startDestination = Screen.Splash.route
     ) {
-
 
 
         composable(Screen.Splash.route) {
@@ -138,8 +138,6 @@ sealed class Screen(val route: String) {
     object GoalSetting : Screen("goal_setting")
 
 
-
-
 }
 
 @Composable
@@ -170,12 +168,16 @@ fun LaunchView() {
         ) {
 
 
+
             Card(
                 modifier = Modifier
                     .padding(horizontal = 12.dp)
                     .clip(RoundedCornerShape(26.dp)),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surface
+                )
 
-                ) {
+            ) {
                 Button(
                     onClick = { /* Handle login */ },
                     modifier = Modifier
@@ -206,7 +208,7 @@ fun LaunchView() {
 
                 Image(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
-                    painter = painterResource(id = R.drawable.ic_fitness_steps_counter),
+                    painter = painterResource(id = R.drawable.fitness_icon),
                     contentDescription = "Fitness Steps Counter",
                 )
 

@@ -2,6 +2,9 @@ package madproject.deepaks3533898.fitnessstepscounter.ui
 
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AutoGraph
+import androidx.compose.material.icons.filled.Category
+import androidx.compose.material.icons.filled.HealthAndSafety
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Person
@@ -63,17 +66,17 @@ val bottomItems = listOf(
 
     BottomNavItem(
         BtmScreen.History,
-        Icons.Default.List
+        Icons.Default.AutoGraph
     ),
 
     BottomNavItem(
         BtmScreen.Goal,
-        Icons.Default.Settings
+        Icons.Default.Category
     ),
 
     BottomNavItem(
         BtmScreen.BMI,
-        Icons.Default.ThumbUp
+        Icons.Default.HealthAndSafety
     ),
 
     BottomNavItem(
