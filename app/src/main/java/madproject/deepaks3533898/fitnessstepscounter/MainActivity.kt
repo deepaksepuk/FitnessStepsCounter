@@ -1,9 +1,12 @@
 package madproject.deepaks3533898.fitnessstepscounter
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricPrompt
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -33,11 +36,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentActivity
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.delay
 import madproject.deepaks3533898.fitnessstepscounter.theme.FitnessStepsCounter
+import madproject.deepaks3533898.fitnessstepscounter.ui.AboutUsScreen
 import madproject.deepaks3533898.fitnessstepscounter.ui.GoalSettingScreen
 import madproject.deepaks3533898.fitnessstepscounter.ui.MainScreen
 import madproject.deepaks3533898.fitnessstepscounter.ui.StartWalkingScreen
@@ -73,14 +79,90 @@ fun AppNavigationMain() {
     ) {
 
 
+//        composable(Screen.Splash.route) {
+//            SplashScreen(
+//                onNavigate = {
+//                    if (AppUserData.getLoginStatus(context)) {
+//                        navController.navigate(Screen.Home.route) {
+//                            popUpTo(Screen.Splash.route) { inclusive = true }
+//                        }
+//                    } else {
+//                        navController.navigate(Screen.Login.route) {
+//                            popUpTo(Screen.Splash.route) { inclusive = true }
+//                        }
+//                    }
+//                }
+//            )
+//        }
+
         composable(Screen.Splash.route) {
             SplashScreen(
                 onNavigate = {
                     if (AppUserData.getLoginStatus(context)) {
-                        navController.navigate(Screen.Home.route) {
-                            popUpTo(Screen.Splash.route) { inclusive = true }
+
+                        val biometricManager =
+                            BiometricManager.from(context)
+
+                        when (
+
+                            biometricManager.canAuthenticate(
+
+                                BiometricManager.Authenticators.BIOMETRIC_STRONG
+
+                            )
+
+                        ) {
+
+                            BiometricManager.BIOMETRIC_SUCCESS -> {
+
+                                authenticateUser(
+
+                                    activity = context as FragmentActivity,
+
+                                    onSuccess = {
+
+                                        navController.navigate(Screen.Home.route) {
+
+                                            popUpTo(Screen.Splash.route) {
+
+                                                inclusive = true
+
+                                            }
+
+                                        }
+
+                                    },
+
+                                    onFailure = {
+
+                                        Toast.makeText(
+
+                                            context,
+
+                                            "Authentication Failed",
+
+                                            Toast.LENGTH_SHORT
+
+                                        ).show()
+
+                                    }
+
+                                )
+
+                            }
+
+                            else -> {
+
+                                navController.navigate(Screen.Home.route) {
+                                    popUpTo(Screen.Splash.route) { inclusive = true }
+                                }
+                            }
+
                         }
-                    } else {
+
+
+
+                    }else{
                         navController.navigate(Screen.Login.route) {
                             popUpTo(Screen.Splash.route) { inclusive = true }
                         }
@@ -121,6 +203,10 @@ fun AppNavigationMain() {
             StartWalkingScreen(navController)
         }
 
+        composable(Screen.AboutApp.route) {
+            AboutUsScreen(navController)
+        }
+
         composable(Screen.GoalSetting.route) {
             GoalSettingScreen()
         }
@@ -135,6 +221,7 @@ sealed class Screen(val route: String) {
     object Home : Screen("home")
 
     object StartWalking : Screen("start_walking")
+    object AboutApp : Screen("about_app")
     object GoalSetting : Screen("goal_setting")
 
 
@@ -245,6 +332,89 @@ fun LaunchView() {
 
         }
     }
+
+}
+
+fun authenticateUser(
+
+    activity: FragmentActivity,
+
+    onSuccess: () -> Unit,
+
+    onFailure: () -> Unit
+
+) {
+
+    val executor =
+        ContextCompat.getMainExecutor(activity)
+
+    val biometricPrompt = BiometricPrompt(
+
+        activity,
+
+        executor,
+
+        object : BiometricPrompt.AuthenticationCallback() {
+
+            override fun onAuthenticationSucceeded(
+
+                result: BiometricPrompt.AuthenticationResult
+
+            ) {
+
+                super.onAuthenticationSucceeded(result)
+
+                onSuccess()
+
+            }
+
+            override fun onAuthenticationFailed() {
+
+                super.onAuthenticationFailed()
+
+                onFailure()
+
+            }
+
+            override fun onAuthenticationError(
+
+                errorCode: Int,
+
+                errString: CharSequence
+
+            ) {
+
+                super.onAuthenticationError(
+
+                    errorCode,
+
+                    errString
+
+                )
+
+                onFailure()
+
+            }
+
+        }
+
+    )
+
+    val promptInfo =
+
+        BiometricPrompt.PromptInfo.Builder()
+
+            .setTitle("Fitness Step Counter")
+
+            .setSubtitle("Verify your identity")
+
+            .setDescription("Authenticate using your fingerprint")
+
+            .setNegativeButtonText("Cancel")
+
+            .build()
+
+    biometricPrompt.authenticate(promptInfo)
 
 }
 

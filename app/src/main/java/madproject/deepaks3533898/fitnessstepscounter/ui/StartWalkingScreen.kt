@@ -26,10 +26,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.DirectionsWalk
 import androidx.compose.material.icons.filled.LocalFireDepartment
+import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Route
+import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -39,6 +41,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -60,6 +63,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import madproject.deepaks3533898.fitnessstepscounter.StatCard
 import madproject.deepaks3533898.fitnessstepscounter.viewmodel.StepTrackerViewModel
+import madproject.deepaks3533898.fitnessstepscounter.viewmodel.UiEvent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -91,6 +95,10 @@ fun StartWalkingScreen(
             permissionGranted = granted
 
         }
+
+    val snackbarHostState = remember {
+        SnackbarHostState()
+    }
 
     LaunchedEffect(Unit) {
 
@@ -330,7 +338,11 @@ fun StartWalkingScreen(
 
                     Spacer(modifier = Modifier.size(8.dp))
 
-                    Text("START")
+                    if (state.durationSeconds > 0) {
+                        Text("Resume")
+                    } else {
+                        Text("START")
+                    }
 
                 }
 
@@ -348,7 +360,7 @@ fun StartWalkingScreen(
 
                 ) {
 
-                    Icon(Icons.Default.Person, null)
+                    Icon(Icons.Default.Pause, null)
 
                     Spacer(modifier = Modifier.size(8.dp))
 
@@ -358,26 +370,26 @@ fun StartWalkingScreen(
 
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Button(
-
-                modifier = Modifier.fillMaxWidth(),
-
-                onClick = {
-
-                    if (state.isTracking)
-                        viewModel.pauseTracking()
-                    else
-                        viewModel.resumeTracking()
-
-                }
-
-            ) {
-
-                Text("RESUME")
-
-            }
+//            Spacer(modifier = Modifier.height(12.dp))
+//
+//            Button(
+//
+//                modifier = Modifier.fillMaxWidth(),
+//
+//                onClick = {
+//
+//                    if (state.isTracking)
+//                        viewModel.pauseTracking()
+//                    else
+//                        viewModel.resumeTracking()
+//
+//                }
+//
+//            ) {
+//
+//                Text("RESUME")
+//
+//            }
 
             Spacer(modifier = Modifier.height(12.dp))
 
@@ -393,7 +405,7 @@ fun StartWalkingScreen(
 
             ) {
 
-                Icon(Icons.Default.Refresh, null)
+                Icon(Icons.Default.Save, null)
 
                 Spacer(modifier = Modifier.size(8.dp))
 
@@ -435,6 +447,27 @@ fun StartWalkingScreen(
 
     }
 
+
+    LaunchedEffect(Unit) {
+
+        viewModel.events.collect { event ->
+
+            when (event) {
+
+                is UiEvent.ShowSnackbar -> {
+
+                    snackbarHostState.showSnackbar(
+                        event.message
+                    )
+
+                }
+
+            }
+
+        }
+
+    }
+
 }
 
 @Composable
@@ -459,7 +492,6 @@ fun FitnessCard(
             containerColor = MaterialTheme.colorScheme.surface
 
         )
-
 
 
     ) {

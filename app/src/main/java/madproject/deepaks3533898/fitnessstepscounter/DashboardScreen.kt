@@ -1,6 +1,7 @@
 package madproject.deepaks3533898.fitnessstepscounter
 
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -20,10 +21,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.DirectionsWalk
 import androidx.compose.material.icons.filled.DirectionsWalk
 import androidx.compose.material.icons.filled.LocalFireDepartment
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Route
 import androidx.compose.material.icons.filled.Schedule
@@ -46,11 +45,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.util.TimeUtils.formatDuration
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import madproject.deepaks3533898.fitnessstepscounter.theme.C2
@@ -91,27 +90,61 @@ fun DashboardScreen(
 
     ) {
 
-        Text(
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
 
-            text = "Hi ,${AppUserData.getUserName(context)} 👋",
+            Column() {
 
-            fontSize = 28.sp,
+                Text(
 
-            fontWeight = FontWeight.Bold
+                    text = "Hi ,${AppUserData.getUserName(context)} 👋",
 
-        )
+                    fontSize = 28.sp,
 
-        Spacer(modifier = Modifier.height(4.dp))
+                    fontWeight = FontWeight.Bold
 
-        Text(
+                )
 
-            text = "Today's Progress",
+                Spacer(modifier = Modifier.height(4.dp))
 
-            color = Color.Gray,
+                Text(
 
-            fontSize = 16.sp
+                    text = "Today's Progress",
 
-        )
+                    color = Color.Gray,
+
+                    fontSize = 16.sp
+
+                )
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            Box(
+                modifier = Modifier
+                    .size(42.dp)
+                    .clip(CircleShape)
+                    .background(Color(0xFF2962FF).copy(alpha = 0.12f))
+                    .clickable {
+                        navController.navigate(Screen.AboutApp.route)
+                    },
+                contentAlignment = Alignment.Center
+
+            ) {
+
+                Image(
+                    painter = painterResource(R.drawable.ic_info),
+                    contentDescription = "About App",
+                    modifier = Modifier.size(64.dp)
+                )
+
+            }
+
+            Spacer(modifier = Modifier.width(12.dp))
+
+        }
 
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -162,7 +195,6 @@ fun DashboardScreen(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
 
         ) {
-
 
 
             StatCard(
@@ -334,8 +366,6 @@ fun DashboardScreen(
         }
 
         Spacer(modifier = Modifier.height(20.dp))
-
-
 
 
     }
@@ -645,7 +675,6 @@ fun WaterCard(
 //                )
 
 
-
                 Text(
 
                     text =
@@ -653,7 +682,6 @@ fun WaterCard(
                         if (glasses == 8)
 
                             "Daily Goal Completed 🎉"
-
                         else
 
                             "Tap to add a glass",
@@ -665,7 +693,6 @@ fun WaterCard(
                         if (glasses == 8)
 
                             Color(0xFF2E7D32)
-
                         else
 
                             Color.Gray

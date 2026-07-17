@@ -6,10 +6,12 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import madproject.deepaks3533898.fitnessstepscounter.data.local.DatabaseProvider
 import madproject.deepaks3533898.fitnessstepscounter.data.local.StepSessionEntity
@@ -119,7 +121,13 @@ class StepTrackerViewModel(
             }
 
 
-
+//            _events.send(
+//                UiEvent.ShowSnackbar(
+//
+//                    "Saved successfully."
+//
+//                )
+//            )
 
         }
 
@@ -233,6 +241,11 @@ class StepTrackerViewModel(
     }
 
 
+    private val _events = Channel<UiEvent>()
+
+    val events = _events.receiveAsFlow()
+
+
     fun stopTracking() {
 
         sensorManager.stopTracking()
@@ -259,6 +272,8 @@ class StepTrackerViewModel(
         }
 
         _uiState.value = StepTrackerState()
+
+
 
     }
 
